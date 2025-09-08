@@ -10,14 +10,11 @@ let package = Package(
             .macOS(.v10_15),
         ],
     products: [
-        // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
             name: "AES_256_CBC",
             targets: ["AES_256_CBC"]),
     ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
             name: "AES_256_CBC"),
 
