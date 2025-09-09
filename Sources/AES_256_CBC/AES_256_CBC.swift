@@ -47,7 +47,7 @@ public extension AES256CBC {
     ///   - key: 256位密钥 (32字节)
     ///   - iv: 初始化向量 (16字节)
     /// - Returns: 解密后的数据，失败返回nil
-    static func decrypt(
+    static func decrypt_async(
         data: Data,
         key: Data,
         iv: Data
