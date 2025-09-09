@@ -21,11 +21,69 @@ public extension AES256CBC {
     ///   - key: 256位密钥 (32字节)
     ///   - iv: 初始化向量 (16字节)
     /// - Returns: 加密后的数据
-    static func encrypt(
+    static func encrypt_async(
         data: Data,
         key: Data,
         iv: Data
     ) async throws(AES256CBCErr) -> Data {
+        do {
+            let result: Data = try await withUnsafeThrowingContinuation { c in
+                do {
+                    let result = try AES256CBC.encrypt(data: data, key: key, iv: iv)
+                    c.resume(returning: result)
+                } catch {
+                    c.resume(throwing: error)
+                }
+            }
+            return result
+        } catch {
+            throw .encrypt(.encrypt_faild(-3))
+        }
+    }
+    
+    /// AES-256-CBC 解密
+    /// - Parameters:
+    ///   - data: 要解密的数据
+    ///   - key: 256位密钥 (32字节)
+    ///   - iv: 初始化向量 (16字节)
+    /// - Returns: 解密后的数据，失败返回nil
+    static func decrypt(
+        data: Data,
+        key: Data,
+        iv: Data
+    ) async throws(AES256CBCErr) -> Data {
+        do {
+            let result: Data = try await withUnsafeThrowingContinuation { c in
+                do {
+                    let result = try AES256CBC.decrypt(data: data, key: key, iv: iv)
+                    c.resume(returning: result)
+                } catch {
+                    c.resume(throwing: error)
+                }
+            }
+            return result
+        } catch {
+            throw .encrypt(.encrypt_faild(-3))
+        }
+    }
+    
+}
+/*
+ try AES256CBC.decrypt(data: data, key: key, iv: iv)
+ */
+
+public extension AES256CBC {
+    /// AES-256-CBC 加密
+    /// - Parameters:
+    ///   - data: 要加密的数据
+    ///   - key: 256位密钥 (32字节)
+    ///   - iv: 初始化向量 (16字节)
+    /// - Returns: 加密后的数据
+    static func encrypt(
+        data: Data,
+        key: Data,
+        iv: Data
+    ) throws(AES256CBCErr) -> Data {
         try AES256CBC.check(key: key, iv: iv)
         
         let dataLength = data.count
@@ -72,7 +130,7 @@ public extension AES256CBC {
         data: Data,
         key: Data,
         iv: Data
-    ) async throws(AES256CBCErr) -> Data {
+    ) throws(AES256CBCErr) -> Data {
         try AES256CBC.check(key: key, iv: iv)
         
         let dataLength = data.count
